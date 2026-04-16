@@ -330,4 +330,4 @@ If this project helped you, please:
 **Happy Studying! 🎓**
 
 Last Updated: April 2024  
-Made with ❤️ by [Your Name]
+Made with ❤️ by Shubham Mahadik
