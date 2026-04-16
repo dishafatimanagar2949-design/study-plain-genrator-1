@@ -1,0 +1,2 @@
+# study-plain-genrator
+study
