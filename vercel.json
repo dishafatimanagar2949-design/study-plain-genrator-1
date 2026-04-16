@@ -18,6 +18,8 @@
   ],
   "env": {
     "FLASK_ENV": "production",
-    "PYTHONUNBUFFERED": "1"
+    "FLASK_DEBUG": "False",
+    "PYTHONUNBUFFERED": "1",
+    "DATABASE_PATH": "/tmp/database.db"
   }
 }

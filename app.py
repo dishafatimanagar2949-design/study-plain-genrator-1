@@ -3,6 +3,7 @@ import sqlite3
 import csv
 import io
 import secrets
+import tempfile
 from datetime import datetime, timedelta
 from flask import Flask, render_template, request, redirect, url_for, session, g, flash, send_file, make_response
 from ml_models import load_models, predict_study_estimate
@@ -14,8 +15,16 @@ load_dotenv()
 app = Flask(__name__)
 # Generate a secure SECRET_KEY if not set in environment
 app.secret_key = os.getenv('SECRET_KEY') or secrets.token_hex(32)
-DATABASE = os.path.join(os.path.dirname(__file__), 'database.db')
 FLASK_ENV = os.getenv('FLASK_ENV', 'development')
+
+# Use a writable database path in production environments like Vercel
+ROOT_DIR = os.path.dirname(__file__)
+if os.getenv('DATABASE_PATH'):
+    DATABASE = os.getenv('DATABASE_PATH')
+elif os.getenv('VERCEL') or os.getenv('NOW_REGION'):
+    DATABASE = os.path.join(tempfile.gettempdir(), 'database.db')
+else:
+    DATABASE = os.path.join(ROOT_DIR, 'database.db')
 
 # Set session config for production
 app.config['SESSION_COOKIE_SECURE'] = False  # Set to True only if using HTTPS
