@@ -2,6 +2,7 @@ import os
 import sqlite3
 import csv
 import io
+import secrets
 from datetime import datetime, timedelta
 from flask import Flask, render_template, request, redirect, url_for, session, g, flash, send_file, make_response
 from ml_models import load_models, predict_study_estimate
@@ -11,9 +12,15 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = os.getenv('SECRET_KEY', os.urandom(24))
+# Generate a secure SECRET_KEY if not set in environment
+app.secret_key = os.getenv('SECRET_KEY') or secrets.token_hex(32)
 DATABASE = os.path.join(os.path.dirname(__file__), 'database.db')
 FLASK_ENV = os.getenv('FLASK_ENV', 'development')
+
+# Set session config for production
+app.config['SESSION_COOKIE_SECURE'] = False  # Set to True only if using HTTPS
+app.config['SESSION_COOKIE_HTTPONLY'] = True
+app.config['PERMANENT_SESSION_LIFETIME'] = 604800  # 7 days
 
 LR_MODEL = None
 DT_MODEL = None
@@ -90,7 +97,26 @@ def execute_db(query, args=()):
 
 def init_ml_models():
     global LR_MODEL, DT_MODEL
-    LR_MODEL, DT_MODEL = load_models()
+    try:
+        LR_MODEL, DT_MODEL = load_models()
+        print("✅ ML models loaded successfully")
+    except Exception as e:
+        print(f"⚠️ Warning: Could not load ML models: {e}")
+        print("App will continue but plan generation may not work optimally")
+
+
+# Initialize database and models on app startup
+with app.app_context():
+    try:
+        init_db()
+        print("✅ Database initialized")
+    except Exception as e:
+        print(f"⚠️ Database initialization warning: {e}")
+    
+    try:
+        init_ml_models()
+    except Exception as e:
+        print(f"⚠️ Model initialization warning: {e}")
 
 
 # Route definitions

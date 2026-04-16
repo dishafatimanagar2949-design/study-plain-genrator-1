@@ -59,19 +59,26 @@ def train_and_save_models(models_dir='models'):
 
 
 def load_models(models_dir='models'):
-    lr_path = os.path.join(models_dir, 'lr_model.pkl')
-    dt_path = os.path.join(models_dir, 'dt_model.pkl')
+    try:
+        # Create models directory if it doesn't exist
+        os.makedirs(models_dir, exist_ok=True)
+        
+        lr_path = os.path.join(models_dir, 'lr_model.pkl')
+        dt_path = os.path.join(models_dir, 'dt_model.pkl')
 
-    if not os.path.exists(lr_path) or not os.path.exists(dt_path):
-        lr, dt = train_and_save_models(models_dir)
+        if not os.path.exists(lr_path) or not os.path.exists(dt_path):
+            lr, dt = train_and_save_models(models_dir)
+            return lr, dt
+
+        with open(lr_path, 'rb') as f:
+            lr = pickle.load(f)
+        with open(dt_path, 'rb') as f:
+            dt = pickle.load(f)
+
         return lr, dt
-
-    with open(lr_path, 'rb') as f:
-        lr = pickle.load(f)
-    with open(dt_path, 'rb') as f:
-        dt = pickle.load(f)
-
-    return lr, dt
+    except Exception as e:
+        print(f"Error loading models: {e}. Training new models...")
+        return train_and_save_models(models_dir)
 
 
 def predict_study_estimate(difficulty, days_until_deadline, performance, lr_model, dt_model):
