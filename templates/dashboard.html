@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Study Planner Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-[#0d1117] text-slate-100">
+<header class="sticky top-0 z-50 border-b border-slate-800 bg-[#0d1117]/95 backdrop-blur px-5 py-3">
+    <div class="mx-auto flex max-w-6xl items-center justify-between">
+        <div class="text-lg font-semibold text-white">AI Study Planner</div>
+        <div class="flex items-center gap-3">
+            <span class="text-sm text-slate-300">{{ session.username }}</span>
+            <a href="{{ url_for('logout') }}" class="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500">Logout</a>
+        </div>
+    </div>
+</header>
+
+<main class="mx-auto max-w-6xl p-5">
+    <section class="mb-6 rounded-2xl border border-slate-800 bg-[#161b22] p-5 shadow-lg shadow-black/40 animate-fade-in">
+        <h1 class="text-2xl font-bold text-white">AI Study Planner</h1>
+        <p class="mt-2 text-slate-300">Professional scheduling with smart priorities, deadline-aware plan and time-block calendar.</p>
+    </section>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="mb-4 space-y-2">
+          {% for category, message in messages %}
+            <div class="rounded-lg border px-4 py-2 text-sm {{ 'bg-emerald-900 text-emerald-200 border-emerald-700' if category == 'success' else 'bg-rose-900 text-rose-200 border-rose-700' }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <section class="mb-6 rounded-2xl border border-slate-800 bg-[#161b22] p-5 shadow-lg shadow-black/40 animate-fade-in">
+        <h2 class="text-xl font-semibold text-white">Plan Builder</h2>
+        <form id="planForm" action="{{ url_for('generate_plan') }}" method="post" target="_blank" class="mt-4 space-y-5">
+            <div class="grid gap-4 sm:grid-cols-2">
+                <label class="text-sm text-slate-300">Available hours / day</label>
+                <input type="number" name="available_hours_per_day" min="1" max="16" step="0.5" value="3" required class="input-glow w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-white" />
+            </div>
+
+            <div id="subjectRows" class="space-y-3"></div>
+
+            <div class="flex flex-wrap gap-3">
+                <button type="button" id="addSubjectBtn" class="button-hover rounded-lg border border-blue-500 bg-slate-800 px-4 py-2 text-sm font-medium text-blue-300">+ Add Subject</button>
+                <button type="submit" class="button-hover rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white">Generate Plan</button>
+                <button type="button" onclick="exportCSV()" class="button-hover rounded-lg bg-slate-700 px-4 py-2 text-sm font-semibold text-blue-300 hover:bg-slate-600">Export CSV</button>
+                <button type="button" onclick="window.print()" class="button-hover rounded-lg bg-slate-700 px-4 py-2 text-sm font-semibold text-blue-300 hover:bg-slate-600">Export PDF</button>
+            </div>
+        </form>
+    </section>
+
+    <section class="rounded-2xl border border-slate-800 bg-[#161b22] p-5 shadow-lg shadow-black/40 animate-fade-in">
+        <h2 class="text-xl font-semibold text-white mb-2">Your Study Plan</h2>
+
+        {% if not plan_by_day %}
+            <p class="text-slate-400">No plan yet. Add subjects and generate plan to view the timetable.</p>
+        {% endif %}
+
+        {% if plan_by_day %}
+            <div class="overflow-x-auto rounded-lg border border-slate-700 bg-slate-900">
+                <table class="min-w-full divide-y divide-slate-700 text-left text-sm">
+                    <thead class="bg-slate-800 text-slate-300">
+                        <tr>
+                            <th class="px-4 py-3">Date</th>
+                            <th class="px-4 py-3">Time</th>
+                            <th class="px-4 py-3">Subject</th>
+                            <th class="px-4 py-3">Topic</th>
+                            <th class="px-4 py-3">Hours</th>
+                            <th class="px-4 py-3">Complete</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-[#161b22]">
+                    {% for day, entries in plan_by_day.items() %}
+                        {% for e in entries %}
+                        <tr class="border-b border-slate-700 {% if loop.index0 % 2 == 0 %}bg-slate-800/50{% endif %}">
+                            <td class="px-4 py-2 text-slate-200">{{ day }}</td>
+                            <td class="px-4 py-2 text-slate-200">{{ e.start_time or 'N/A' }} - {{ e.end_time or 'N/A' }}</td>
+                            <td class="px-4 py-2 text-slate-200">{{ e.subject }}</td>
+                            <td class="px-4 py-2 text-slate-200">{{ e.topic }}</td>
+                            <td class="px-4 py-2 text-slate-200">{{ e.hours }}</td>
+                            <td class="px-4 py-2 flex gap-2">
+                                <form action="{{ url_for('toggle_task', task_id=e.id) }}" method="post" style="display:inline;">
+                                  <button type="submit" class="rounded-md bg-blue-600 px-2 py-1 text-xs font-semibold text-white hover:bg-blue-500">{{ 'Undo' if e.completed else 'Done' }}</button>
+                                </form>
+                                <form action="{{ url_for('delete_task', task_id=e.id) }}" method="post" style="display:inline;">
+                                  <button type="submit" class="rounded-md bg-rose-600 px-2 py-1 text-xs font-semibold text-white hover:bg-rose-500">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </section>
+</main>
+
+<script src="{{ url_for('static', filename='js/planner.js') }}"></script>
+</body>
+</html>

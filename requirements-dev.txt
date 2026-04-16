@@ -1,0 +1,19 @@
+# Development dependencies
+# Install with: pip install -r requirements-dev.txt
+
+-r requirements.txt
+
+# Testing
+pytest==7.4.0
+pytest-flask==1.2.0
+
+# Code quality
+black==23.7.0
+flake8==6.0.0
+pylint==2.17.5
+
+# Debugging
+flask-debugtoolbar==0.14.1
+
+# Development server
+flask-cors==4.0.0

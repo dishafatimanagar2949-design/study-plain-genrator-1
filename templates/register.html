@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Study Planner - Register</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100">
+  <div class="flex min-h-screen items-center justify-center px-4">
+    <div class="w-full max-w-md space-y-6 rounded-2xl border border-slate-800 bg-slate-900/95 p-8 shadow-2xl shadow-black/40 backdrop-blur animate-fade-in">
+      <div class="text-center">
+        <p class="text-xs uppercase tracking-widest text-slate-400">AI Study Planner</p>
+        <h1 class="mt-2 text-3xl font-semibold text-white">Create Account</h1>
+        <p class="mt-1 text-sm text-slate-400">Start planning your study schedule with AI guidance.</p>
+      </div>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="space-y-2">
+            {% for category, message in messages %}
+              <div class="rounded-lg border border-slate-700 px-4 py-2 text-sm {{ 'bg-emerald-900 text-emerald-200 border-emerald-700' if category == 'success' else 'bg-rose-900 text-rose-200 border-rose-700' }}">{{ message }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      <form action="{{ url_for('register') }}" method="post" class="space-y-5">
+        <div>
+          <label class="mb-2 block text-sm text-slate-300" for="username">Username</label>
+          <input id="username" name="username" type="text" required placeholder="Choose username" class="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-3 text-sm text-slate-100 transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 input-glow" />
+        </div>
+        <div>
+          <label class="mb-2 block text-sm text-slate-300" for="password">Password</label>
+          <input id="password" name="password" type="password" required placeholder="Set password" class="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-3 text-sm text-slate-100 transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 input-glow" />
+        </div>
+
+        <button type="submit" class="w-full rounded-xl bg-blue-600 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-700/30 button-hover">Register</button>
+
+        <div class="flex justify-center text-xs text-slate-400">
+          <a href="{{ url_for('login') }}" class="hover:text-blue-400">Already have an account?</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,38 @@
+# Virtual Environment
+.venv/
+venv/
+env/
+ENV/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Flask instance folder
+instance/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# IDE and editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+*.log
+
+# ML Models (optional - comment out if you want to version control)
+models/*.pkl
+
+# Environment variables
+.env
+.env.local

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Study Planner - Your Smart Study Scheduler</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @keyframes fade-in {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .animate-fade-in {
+      animation: fade-in 0.6s ease-out;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100">
+  <!-- Navigation -->
+  <header class="sticky top-0 z-50 border-b border-slate-800 bg-slate-950/95 backdrop-blur">
+    <div class="mx-auto max-w-6xl px-5 py-4 flex items-center justify-between">
+      <div class="text-xl font-bold text-white">📚 AI Study Planner</div>
+      <div class="flex gap-4">
+        <a href="{{ url_for('login') }}" class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500 transition">Login</a>
+        <a href="{{ url_for('register') }}" class="rounded-lg border border-blue-500 px-4 py-2 text-sm font-semibold text-blue-300 hover:bg-blue-600 transition">Register</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="mx-auto max-w-6xl px-5 py-20">
+    <div class="text-center animate-fade-in">
+      <h1 class="text-5xl font-bold text-white mb-4">Your Intelligent Study Planner</h1>
+      <p class="text-xl text-slate-400 mb-8">Generate personalized study schedules powered by AI and machine learning</p>
+      <div class="flex gap-4 justify-center">
+        <a href="{{ url_for('register') }}" class="rounded-lg bg-blue-600 px-8 py-3 font-semibold text-white hover:bg-blue-500 transition">Get Started Free</a>
+        <a href="#features" class="rounded-lg border border-slate-700 px-8 py-3 font-semibold text-slate-300 hover:border-slate-600 transition">Learn More</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="mx-auto max-w-6xl px-5 py-16">
+    <h2 class="text-3xl font-bold text-white mb-12 text-center">Powerful Features</h2>
+    <div class="grid md:grid-cols-3 gap-8">
+      <!-- Feature 1 -->
+      <div class="rounded-xl border border-slate-800 bg-slate-900/50 p-6 backdrop-blur hover:border-blue-500/50 transition">
+        <div class="text-3xl mb-4">🤖</div>
+        <h3 class="text-xl font-semibold text-white mb-2">AI-Powered Planning</h3>
+        <p class="text-slate-400">Machine learning algorithms analyze your subjects and create optimal study schedules based on difficulty, deadlines, and your performance levels.</p>
+      </div>
+
+      <!-- Feature 2 -->
+      <div class="rounded-xl border border-slate-800 bg-slate-900/50 p-6 backdrop-blur hover:border-blue-500/50 transition">
+        <div class="text-3xl mb-4">📊</div>
+        <h3 class="text-xl font-semibold text-white mb-2">Smart Scheduling</h3>
+        <p class="text-slate-400">Get day-wise, hour-by-hour study schedules respecting your daily availability and deadlines. Perfect time management at your fingertips.</p>
+      </div>
+
+      <!-- Feature 3 -->
+      <div class="rounded-xl border border-slate-800 bg-slate-900/50 p-6 backdrop-blur hover:border-blue-500/50 transition">
+        <div class="text-3xl mb-4">💾</div>
+        <h3 class="text-xl font-semibold text-white mb-2">Export & Track</h3>
+        <p class="text-slate-400">Export plans as CSV or PDF, track your progress, mark tasks complete, and stay organized throughout your study period.</p>
+      </div>
+
+      <!-- Feature 4 -->
+      <div class="rounded-xl border border-slate-800 bg-slate-900/50 p-6 backdrop-blur hover:border-blue-500/50 transition">
+        <div class="text-3xl mb-4">🔐</div>
+        <h3 class="text-xl font-semibold text-white mb-2">Secure & Private</h3>
+        <p class="text-slate-400">Your data is encrypted and stored securely. User authentication ensures only you can access your personalized study plans.</p>
+      </div>
+
+      <!-- Feature 5 -->
+      <div class="rounded-xl border border-slate-800 bg-slate-900/50 p-6 backdrop-blur hover:border-blue-500/50 transition">
+        <div class="text-3xl mb-4">📱</div>
+        <h3 class="text-xl font-semibold text-white mb-2">Responsive Design</h3>
+        <p class="text-slate-400">Works seamlessly on desktop, tablet, and mobile. Study anywhere, anytime with your optimized schedule.</p>
+      </div>
+
+      <!-- Feature 6 -->
+      <div class="rounded-xl border border-slate-800 bg-slate-900/50 p-6 backdrop-blur hover:border-blue-500/50 transition">
+        <div class="text-3xl mb-4">⚡</div>
+        <h3 class="text-xl font-semibold text-white mb-2">Real-time Updates</h3>
+        <p class="text-slate-400">Instantly regenerate plans, update schedules, and adapt to changing priorities and deadlines in real-time.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="mx-auto max-w-6xl px-5 py-16">
+    <h2 class="text-3xl font-bold text-white mb-12 text-center">How It Works</h2>
+    <div class="grid md:grid-cols-4 gap-4">
+      <div class="text-center">
+        <div class="mx-auto mb-4 h-12 w-12 rounded-full bg-blue-600 flex items-center justify-center text-lg font-bold">1</div>
+        <h3 class="text-lg font-semibold text-white mb-2">Register</h3>
+        <p class="text-slate-400">Create your free account in seconds</p>
+      </div>
+      <div class="text-center">
+        <div class="mx-auto mb-4 h-12 w-12 rounded-full bg-blue-600 flex items-center justify-center text-lg font-bold">2</div>
+        <h3 class="text-lg font-semibold text-white mb-2">Add Subjects</h3>
+        <p class="text-slate-400">Input your subjects with details and deadlines</p>
+      </div>
+      <div class="text-center">
+        <div class="mx-auto mb-4 h-12 w-12 rounded-full bg-blue-600 flex items-center justify-center text-lg font-bold">3</div>
+        <h3 class="text-lg font-semibold text-white mb-2">Generate Plan</h3>
+        <p class="text-slate-400">AI creates optimal study schedule instantly</p>
+      </div>
+      <div class="text-center">
+        <div class="mx-auto mb-4 h-12 w-12 rounded-full bg-blue-600 flex items-center justify-center text-lg font-bold">4</div>
+        <h3 class="text-lg font-semibold text-white mb-2">Study & Excel</h3>
+        <p class="text-slate-400">Follow your schedule and track progress</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="mx-auto max-w-2xl px-5 py-16 text-center">
+    <h2 class="text-3xl font-bold text-white mb-4">Ready to Transform Your Study Habits?</h2>
+    <p class="text-slate-400 mb-8">Join thousands of students using AI Study Planner to ace their exams.</p>
+    <a href="{{ url_for('register') }}" class="rounded-lg bg-blue-600 px-8 py-3 inline-block font-semibold text-white hover:bg-blue-500 transition">Start Now - It's Free!</a>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800 bg-slate-900 mt-16">
+    <div class="mx-auto max-w-6xl px-5 py-8 text-center text-slate-400 text-sm">
+      <p>&copy; 2024 AI Study Planner. All rights reserved. | <a href="https://github.com" class="hover:text-blue-400">GitHub</a> | <a href="https://vercel.com" class="hover:text-blue-400">Deployed on Vercel</a></p>
+    </div>
+  </footer>
+</body>
+</html>
