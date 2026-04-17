@@ -15,11 +15,11 @@ load_dotenv()
 FLASK_ENV = os.getenv('FLASK_ENV', 'development')
 app = Flask(__name__)
 
-secret_key = os.getenv('SECRET_KEY')
+secret_key = os.getenv('SECRET_KEY') or 'b308a03003bea0e089083bf27a4ed30d25ba3b2c2c1fff45cf95a20aecd3e28e'
 if not secret_key and FLASK_ENV == 'production':
     raise RuntimeError('SECRET_KEY must be set in production')
 
-app.secret_key = secret_key or secrets.token_hex(32)
+app.secret_key = secret_key
 
 if os.getenv('DATABASE_PATH'):
     DATABASE = os.getenv('DATABASE_PATH')
