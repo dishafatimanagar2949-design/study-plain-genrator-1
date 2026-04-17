@@ -12,24 +12,30 @@ from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv()
 
-app = Flask(__name__)
-# Generate a secure SECRET_KEY if not set in environment
-app.secret_key = os.getenv('SECRET_KEY') or secrets.token_hex(32)
 FLASK_ENV = os.getenv('FLASK_ENV', 'development')
+app = Flask(__name__)
 
-# Use a writable database path in production environments like Vercel
-ROOT_DIR = os.path.dirname(__file__)
+secret_key = os.getenv('SECRET_KEY')
+if not secret_key and FLASK_ENV == 'production':
+    raise RuntimeError('SECRET_KEY must be set in production')
+
+app.secret_key = secret_key or secrets.token_hex(32)
+
 if os.getenv('DATABASE_PATH'):
     DATABASE = os.getenv('DATABASE_PATH')
 elif os.getenv('VERCEL') or os.getenv('NOW_REGION'):
     DATABASE = os.path.join(tempfile.gettempdir(), 'database.db')
 else:
-    DATABASE = os.path.join(ROOT_DIR, 'database.db')
+    DATABASE = os.path.join(os.path.dirname(__file__), 'database.db')
 
-# Set session config for production
-app.config['SESSION_COOKIE_SECURE'] = False  # Set to True only if using HTTPS
-app.config['SESSION_COOKIE_HTTPONLY'] = True
-app.config['PERMANENT_SESSION_LIFETIME'] = 604800  # 7 days
+os.makedirs(os.path.dirname(DATABASE), exist_ok=True)
+
+app.config.update(
+    SESSION_COOKIE_HTTPONLY=True,
+    SESSION_COOKIE_SECURE=(FLASK_ENV == 'production'),
+    SESSION_COOKIE_SAMESITE='Lax',
+    PERMANENT_SESSION_LIFETIME=timedelta(days=7),
+)
 
 LR_MODEL = None
 DT_MODEL = None
